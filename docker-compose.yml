@@ -1,0 +1,43 @@
+version: '3.8'
+
+services:
+  # --- BACKEND (FastAPI) ---
+  backend:
+    build: ./backend
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./backend:/app
+    environment:
+      - DATABASE_URL=postgresql://user:password@db:5432/technical_debt_db
+    depends_on:
+      - db
+    restart: always
+
+  # --- FRONTEND (React) ---
+  frontend:
+    build: ./frontend
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+    environment:
+      - CHOKIDAR_USEPOLLING=true # INDISPENSABLE pour Windows pour détecter les changements CSS
+    stdin_open: true
+    tty: true
+
+  # --- BASE DE DONNÉES (PostgreSQL) ---
+  db:
+    image: postgres:15
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_USER=user
+      - POSTGRES_PASSWORD=password
+      - POSTGRES_DB=technical_debt_db
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+volumes:
+  postgres_data:
