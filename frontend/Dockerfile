@@ -1,9 +1,12 @@
-FROM node:18
+FROM node:20-alpine
+
 WORKDIR /app
-# Copie des fichiers de dépendances pour optimiser le cache Docker
-COPY package*.json ./
+
+COPY package.json package-lock.json* ./
 RUN npm install
-# Copie du reste du code source
+
 COPY . .
+
 EXPOSE 3000
-CMD ["npm", "start"]
+
+CMD ["npm", "run", "dev"]

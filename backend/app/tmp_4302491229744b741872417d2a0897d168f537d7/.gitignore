@@ -1,0 +1,10 @@
+*.pyc
+*.db
+*~
+.*
+*.egg-info
+profile
+dist
+
+!.gitignore
+__pycache__
